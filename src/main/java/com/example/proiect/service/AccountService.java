@@ -26,7 +26,9 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
-    public void deleteAccount(String user_email) {
-        accountRepository.deleteById(user_email);
-    }
+//    public void deleteAccount(String user_email) {
+//        accountRepository.deleteById(user_email);
+//    }
+
+    public void deleteById(int id){accountRepository.deleteById(id);}
 }

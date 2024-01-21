@@ -11,12 +11,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -83,6 +81,23 @@ public class HomeController {
 		accountService.saveAccount(newAccount);
 
 		return "redirect:/myaccounts";
+	}
+
+//	@PostMapping("/delete")
+//	public String deleteAccount(@RequestParam String domain , @AuthenticationPrincipal OidcUser principal ) {
+//		List<Account> accounts = accountService.getAccountByEmail((String) principal.getUserInfo().getClaims().get("email"));
+//		Optional<Account> accountOptional = accounts.stream()
+//				.filter(account -> domain.equals(account.getDomain()))
+//				.findFirst();
+//
+//		accountOptional.ifPresent(account -> accountService.deleteById(account.getAccount_id()));
+//		return "redirect:/myaccounts";  // Redirect to the accounts page after deletion
+//	}
+
+	@PostMapping("/delete/{id}")
+	public String deleteAccount(@PathVariable int id , @AuthenticationPrincipal OidcUser principal ) {
+	accountService.deleteById(id);
+		return "redirect:/myaccounts";  // Redirect to the accounts page after deletion
 	}
 
 

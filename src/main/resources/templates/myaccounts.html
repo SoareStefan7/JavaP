@@ -57,19 +57,30 @@
             <th>Account</th>
             <th>Username</th>
             <th>Password</th>
+            <th>Action</th> <!-- New column for the "Delete" button -->
             <!-- Add more columns as needed -->
         </tr>
         </thead>
         <tbody>
         <!-- Check if accountList is null or empty -->
         <tr th:if="${#lists.isEmpty(accountList)}">
-            <td colspan="3">You have no accounts registered yet.</td>
+            <td colspan="4">You have no accounts registered yet.</td>
         </tr>
         <!-- Iterate through the list of accounts and populate the table -->
         <tr th:each="account : ${accountList}">
             <td th:text="${account.domain}"></td>
             <td th:text="${account.email}"></td>
             <td th:text="${account.password}"></td>
+
+            <!-- Add the "Delete" button -->
+            <td>
+                <form th:action="@{/delete}" th:method="post">
+                    <!-- Hidden input to store the domain value -->
+                    <input type="hidden" th:name="_method" th:value="delete" />
+                    <input type="hidden" th:name="domain" th:value="${account.domain}" />
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
             <!-- Add more columns as needed -->
         </tr>
         </tbody>
