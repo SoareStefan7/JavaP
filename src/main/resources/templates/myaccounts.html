@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <!-- Your existing head content -->
+
+    <style>
+        /* Your existing styles */
+        /* Style to hide the form initially */
+        #addAccountForm {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div sec:authorize="!isAuthenticated()">
+    <a th:href="@{/oauth2/authorization/okta}">Log In</a>
+</div>
+
+<header>
+    <h1>Your Password Manager</h1>
+</header>
+
+<div class="container" sec:authorize="isAuthenticated()">
+    <!-- Your existing content -->
+
+    <!-- Button for "My Accounts and Passwords" -->
+    <button id="my-accounts-button" onclick="window.location.href='/myaccounts'">
+        My Accounts and Passwords
+    </button>
+
+    <!-- Button to show/hide the "Add Account" form -->
+    <button id="add-account-button" onclick="toggleAddAccountForm()">
+        Add Account
+    </button>
+
+    <!-- Form for adding a new account (initially hidden) -->
+    <form id="addAccountForm" action="/myaccounts" method="post">
+        <label for="newDomain">New Domain:</label>
+        <input type="text" id="newDomain" name="newDomain" required><br>
+
+        <label for="newPassword">New Password:</label>
+        <input type="password" id="newPassword" name="newPassword" required><br>
+
+        <button type="submit">Save</button>
+    </form>
+
+    <!-- Your existing logout form -->
+    <form name="logoutForm" th:action="@{/logout}" method="post">
+        <button type="submit">Log out</button>
+    </form>
+
+    <!-- Table for My Accounts and Passwords -->
+    <table id="accounts-table">
+        <thead>
+        <tr>
+            <th>Account</th>
+            <th>Username</th>
+            <th>Password</th>
+            <!-- Add more columns as needed -->
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Check if accountList is null or empty -->
+        <tr th:if="${#lists.isEmpty(accountList)}">
+            <td colspan="3">You have no accounts registered yet.</td>
+        </tr>
+        <!-- Iterate through the list of accounts and populate the table -->
+        <tr th:each="account : ${accountList}">
+            <td th:text="${account.domain}"></td>
+            <td th:text="${account.email}"></td>
+            <td th:text="${account.password}"></td>
+            <!-- Add more columns as needed -->
+        </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function toggleAddAccountForm() {
+            var form = document.getElementById("addAccountForm");
+            form.style.display = form.style.display === "none" ? "block" : "none";
+        }
+    </script>
+</div>
+
+</body>
+</html>

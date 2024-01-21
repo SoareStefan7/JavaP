@@ -1,0 +1,25 @@
+okta:
+  oauth2:
+    issuer: https://dev-alx5xirffgwqjuuw.eu.auth0.com/
+    client-id: WDAojzVTB9rUez380YgAFHyM6PIFXjEi
+    client-secret: VPU9UpaVS5qLJ6nhiWntm1dBq8nett-0b_-XQ-amoTWutcFrrGrMrirBnf2sTx4L
+ 
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/passwordmanagerusers
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+# The sample and instructions above for the callback and logout URL configuration use port 3000.
+# If you wish to use a different port, change this and be sure your callback and logout URLs are
+# configured with the correct port.
+server:
+  port: 3030

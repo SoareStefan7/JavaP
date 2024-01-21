@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <!-- Your existing head content -->
+
+    <style>
+        /* Your existing styles */
+
+        /* New style for the my accounts button */
+        #my-accounts-button {
+            display: none; /* Initially hide the button */
+        }
+    </style>
+</head>
+<body>
+
+<div sec:authorize="!isAuthenticated()">
+    <a th:href="@{/oauth2/authorization/okta}">Log In</a>
+</div>
+
+<header>
+    <h1>Your Password Manager</h1>
+</header>
+
+<div class="container" sec:authorize="isAuthenticated()">
+    <!-- Your existing content -->
+
+    <!-- New button for "My Accounts and Passwords" -->
+    <button id="my-accounts-button" onclick="window.location.href='/myaccounts'">
+        My Accounts and Passwords
+    </button>
+
+    <!-- Your existing logout form -->
+    <form name="logoutForm" th:action="@{/logout}" method="post">
+        <button type="submit">Log out</button>
+    </form>
+</div>
+
+<script>
+    // JavaScript to show the button when logged in
+    document.addEventListener("DOMContentLoaded", function() {
+        var myAccountsButton = document.getElementById("my-accounts-button");
+        myAccountsButton.style.display = "block"; // Show the button
+    });
+</script>
+
+</body>
+</html>
