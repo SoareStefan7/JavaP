@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
 <head>
     <!-- Your existing head content -->
 
@@ -11,6 +12,7 @@
         }
     </style>
 </head>
+
 <body>
 
 <div sec:authorize="!isAuthenticated()">
@@ -27,6 +29,10 @@
     <!-- Button for "My Accounts and Passwords" -->
     <button id="my-accounts-button" onclick="window.location.href='/myaccounts'">
         My Accounts and Passwords
+    </button>
+
+    <button id="generate-password-button" onclick="window.location.href='/generatepassword'">
+        Generate Password
     </button>
 
     <!-- Button to show/hide the "Add Account" form -->
@@ -57,6 +63,7 @@
             <th>Account</th>
             <th>Username</th>
             <th>Password</th>
+            <th>Password Strength</th> <!-- New column for password strength indicator -->
             <th>Action</th> <!-- New column for the "Delete" button -->
             <!-- Add more columns as needed -->
         </tr>
@@ -64,13 +71,23 @@
         <tbody>
         <!-- Check if accountList is null or empty -->
         <tr th:if="${#lists.isEmpty(accountList)}">
-            <td colspan="4">You have no accounts registered yet.</td>
+            <td colspan="5">You have no accounts registered yet.</td>
         </tr>
         <!-- Iterate through the list of accounts and populate the table -->
-        <tr th:each="account : ${accountList}">
+        <tr th:each="account, status : ${accountList}">
             <td th:text="${account.domain}"></td>
             <td th:text="${account.email}"></td>
             <td th:text="${account.password}"></td>
+
+            <!-- New column for password strength indicator -->
+            <td>
+                <div th:switch="${passwordStrengthList[status.index]}">
+                    <span th:case="'STRONG'"><div style="width: 20px; height: 20px; background-color: green;"></div></span>
+                    <span th:case="'MEDIUM'"><div style="width: 20px; height: 20px; background-color: yellow;"></div></span>
+                    <span th:case="'WEAK'"><div style="width: 20px; height: 20px; background-color: red;"></div></span>
+                    <span th:case="*">*</span>
+                </div>
+            </td>
 
             <!-- Add the "Delete" button -->
             <td>
@@ -95,4 +112,5 @@
 </div>
 
 </body>
+
 </html>

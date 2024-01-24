@@ -6,6 +6,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.security.SecureRandom;
+
 @SpringBootApplication
 @ComponentScan
 public class ProiectApplication {
