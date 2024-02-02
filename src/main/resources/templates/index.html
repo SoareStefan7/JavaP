@@ -1,33 +1,104 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-    <!-- Your existing head content -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Password Manager</title>
+
+    <!-- Link to your existing CSS file (replace with your actual file path) -->
+    <link rel="stylesheet" href="path/to/your/style.css">
 
     <style>
-        /* Your existing styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #3498db;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        a, button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        a {
+            background-color: #2ecc71;
+        }
+
+        button {
+            background-color: #e74c3c;
+        }
+
+        button:hover, a:hover {
+            background-color: #1abc9c;
+        }
+
+        #my-accounts-button {
+            background-color: #3498db;
+        }
 
         /* New style for the my accounts button */
         #my-accounts-button {
             display: none; /* Initially hide the button */
         }
+
+        .content-section {
+            padding: 20px;
+            border-top: 1px solid #ddd;
+            margin-top: 20px;
+        }
+
+        .content-section p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
 
-<div sec:authorize="!isAuthenticated()">
-    <a th:href="@{/oauth2/authorization/okta}">Log In</a>
-</div>
-
 <header>
-    <h1>Your Password Manager</h1>
+    <h1>Your Secure Password Manager</h1>
+    <p>Safeguarding your digital life with ease!</p>
+
+    <div sec:authorize="!isAuthenticated()">
+        <a th:href="@{/oauth2/authorization/okta}">Go to Login Page</a>
+    </div>
 </header>
 
 <div class="container" sec:authorize="isAuthenticated()">
-    <!-- Your existing content -->
+    <div class="content-section">
+        <p>Welcome to your secure space where passwords are managed effortlessly.</p>
+        <p>Never worry about forgotten passwords or security breaches again!</p>
+    </div>
 
     <!-- New button for "My Accounts and Passwords" -->
     <button id="my-accounts-button" onclick="window.location.href='/myaccounts'">
-        My Accounts and Passwords
+        My  Accounts and Passwords
     </button>
 
     <!-- Your existing logout form -->

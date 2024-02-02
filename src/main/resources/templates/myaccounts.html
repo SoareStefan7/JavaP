@@ -2,70 +2,168 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
-    <!-- Your existing head content -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Password Manager</title>
+
+    <!-- Link to your existing CSS file (replace with your actual file path) -->
+    <link rel="stylesheet" href="path/to/your/style.css">
 
     <style>
-        /* Your existing styles */
-        /* Style to hide the form initially */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #3498db;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        #my-accounts-button {
+            background-color: #2ecc71;
+        }
+
+        #generate-password-button {
+            background-color: #3498db;
+        }
+
+        #add-account-button {
+            background-color: #e74c3c;
+        }
+
         #addAccountForm {
             display: none;
+            margin-top: 20px;
+        }
+
+        form {
+            margin: 10px 0;
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        input {
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .password-strength-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .strong { background-color: green; }
+        .medium { background-color: yellow; }
+        .weak { background-color: red; }
+
+        /* Updated styles */
+        button[type="submit"] {
+            background-color: #2ecc71; /* Green for Save button */
+        }
+
+        form[name="logoutForm"] button {
+            background-color: #e74c3c; /* Red for Log out button */
+        }
+
+        form th\\:action="@{/delete}"] button {
+            background-color: #e74c3c; /* Red for Delete button */
         }
     </style>
 </head>
 
 <body>
 
-<div sec:authorize="!isAuthenticated()">
-    <a th:href="@{/oauth2/authorization/okta}">Log In</a>
-</div>
-
 <header>
     <h1>Your Password Manager</h1>
 </header>
 
 <div class="container" sec:authorize="isAuthenticated()">
-    <!-- Your existing content -->
+    <!-- Buttons -->
+    <button id="my-accounts-button" onclick="window.location.href='/myaccounts'">My Accounts</button>
+    <button id="generate-password-button" onclick="window.location.href='/generatepassword'">Generate Password</button>
+    <button id="add-account-button" onclick="toggleAddAccountForm()">Add Account</button>
 
-    <!-- Button for "My Accounts and Passwords" -->
-    <button id="my-accounts-button" onclick="window.location.href='/myaccounts'">
-        My Accounts and Passwords
-    </button>
-
-    <button id="generate-password-button" onclick="window.location.href='/generatepassword'">
-        Generate Password
-    </button>
-
-    <!-- Button to show/hide the "Add Account" form -->
-    <button id="add-account-button" onclick="toggleAddAccountForm()">
-        Add Account
-    </button>
-
-    <!-- Form for adding a new account (initially hidden) -->
+    <!-- Add Account Form -->
     <form id="addAccountForm" action="/myaccounts" method="post">
-        <label for="newDomain">New Domain:</label>
+        <label for="newDomain">Domain:</label>
         <input type="text" id="newDomain" name="newDomain" required><br>
 
-        <label for="newPassword">New Password:</label>
+        <label for="newPassword">Password:</label>
         <input type="password" id="newPassword" name="newPassword" required><br>
 
         <button type="submit">Save</button>
     </form>
 
-    <!-- Your existing logout form -->
+    <!-- Logout Form -->
     <form name="logoutForm" th:action="@{/logout}" method="post">
         <button type="submit">Log out</button>
     </form>
 
-    <!-- Table for My Accounts and Passwords -->
+    <!-- Accounts Table -->
     <table id="accounts-table">
         <thead>
         <tr>
             <th>Account</th>
             <th>Username</th>
             <th>Password</th>
-            <th>Password Strength</th> <!-- New column for password strength indicator -->
-            <th>Action</th> <!-- New column for the "Delete" button -->
-            <!-- Add more columns as needed -->
+            <th>Password Strength</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
@@ -79,26 +177,21 @@
             <td th:text="${account.email}"></td>
             <td th:text="${account.password}"></td>
 
-            <!-- New column for password strength indicator -->
             <td>
-                <div th:switch="${passwordStrengthList[status.index]}">
-                    <span th:case="'STRONG'"><div style="width: 20px; height: 20px; background-color: green;"></div></span>
-                    <span th:case="'MEDIUM'"><div style="width: 20px; height: 20px; background-color: yellow;"></div></span>
-                    <span th:case="'WEAK'"><div style="width: 20px; height: 20px; background-color: red;"></div></span>
-                    <span th:case="*">*</span>
+                <div th:switch="${passwordStrengthList[status.index]}" th:class="${passwordStrengthList[status.index]}">
+                    <!-- Password Strength Indicator -->
+                    <div class="password-strength-indicator"></div>
                 </div>
             </td>
 
-            <!-- Add the "Delete" button -->
             <td>
+                <!-- Delete Button Form -->
                 <form th:action="@{/delete}" th:method="post">
-                    <!-- Hidden input to store the domain value -->
                     <input type="hidden" th:name="_method" th:value="delete" />
                     <input type="hidden" th:name="account_id" th:value="${account.account_id}" />
                     <button type="submit">Delete</button>
                 </form>
             </td>
-            <!-- Add more columns as needed -->
         </tr>
         </tbody>
     </table>
